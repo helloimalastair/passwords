@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Ultra-Secure Password Generator</title>
+    <link href="bootstrap.css" rel="stylesheet"/>
+    <link href="style.css" rel="stylesheet"/>
+  </head>
+  <body id="page-top" class="d-flex flex-column h-100">
+    <main>
+      <header id="page-header" class="bg-primary py-5 page__header page__header--blue">
+        <div class="container h-100">
+          <div class="row h-100 align-items-center py-5">
+            <div class="col-lg-12 text-center">
+              <h1 class="display-4 text-white mt-5 mb-2">Generate Ultra-Secure Passwords</h1>
+              <a class="nav-link display-4" href="https://www.goalastair.com">Made with ❤️ by Alastair</a>
+            </div>
+          </div>
+        </div>
+      </header>
+      <section>
+        <section id="main-content">
+          <div class="container flex-shrink-0 py-5">
+            <div class="row">
+              <div class="offset-sm-4 col-sm-4">
+                <fieldset class="row mb-3">
+                  <legend class="col-form-label col-sm-2 pt-0">Character Selection</legend>
+                  <div class="col-sm-10">
+                    <div class="form-check">
+                      <input class="form-check-input" type="checkbox" name="num" checked />
+                      <label class="form-check-label" for="num">
+                        Numbers
+                      </label>
+                    </div>
+                    <div class="form-check">
+                      <input class="form-check-input" type="checkbox" name="alpha" checked />
+                      <label class="form-check-label" for="gridRadios2">
+                        Alphabetical
+                      </label>
+                    </div>
+                    <div class="form-check">
+                      <input class="form-check-input" type="checkbox" name="char" checked />
+                      <label class="form-check-label" for="char">
+                        Symbols
+                      </label>
+                    </div>
+                  </div>
+                </fieldset>
+                <div class="row mb-3">
+                  <label for="length" class="col-sm-2 col-form-label">Length</label>
+                  <div class="col-sm-10">
+                    <input type="text" class="form-control" name="len" />
+                  </div>
+                </div>
+                <div class="row mb-3">
+                  <label for="amount" class="col-sm-2 col-form-label">Amount</label>
+                  <div class="col-sm-10">
+                    <input type="number" class="form-control" name="amt" />
+                  </div>
+                </div>
+                <div class="row mb-3">
+                  <label for="seed" class="col-sm-2 col-form-label">Seed</label>
+                  <div class="col-sm-10">
+                    <input type="text" class="form-control" name="seed" />
+                  </div>
+                </div>
+                <fieldset class="row mb-3">
+                  <legend class="col-form-label col-sm-2 pt-0">Use <a target="_blank" href="https://random.org">Random.org</a> Data</legend>
+                  <div class="col-sm-10">
+                    <div class="form-check">
+                      <input class="form-check-input" type="checkbox" name="randOrg" />
+                      <label class="form-check-label" for="randOrg">
+                        Only check if you are generating a few passwords, otherwise you may be flagged/blocked.
+                      </label>
+                    </div>
+                  </div>
+                </fieldset>
+                <div class="row mb-3">
+                  <button type="submit" class="btn btn-primary" onclick="myWorker.postMessage(getData())">
+                    Generate
+                  </button>
+                </div>
+                <div class="row mb-3">
+                  <div class="card">
+                    <div class="card-body">
+                      <h5 class="card-title">Generated Password(s):</h5>
+                      <p id="output" class="card-text"></p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+      </section>
+    </main>
+    <script src="script.js"></script>
+  </body>
+</html>
