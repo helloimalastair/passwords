@@ -5,21 +5,26 @@ const BetterRand = t => {const n=function(t){for(var n=0,r=1779033703^t.length;n
 	charSet = ["`","-","=","[","]","\\",";","'",",",".","/","~","!","@","#","$","%","^","&","*","(",")","_","+","{","}","|",":","\"","<",">","?"];
 
 onmessage = async e => {
-  const {len, s, amt, num, alpha, char, randOrg} = e.data;
+  const {logging, len, suppliedSeed, amt, num, alpha, char, randOrg, mouseData} = e.data;
   if(!num && !alpha && !char) return postMessage({error: "Missing CharSet"});
   if(len && (len < 1 || len > 4096)) return postMessage({error: "Invalid Length"});
   if(amt && (amt < 1 || amt > 128)) return postMessage({error: "Invalid Amount"});
 	const beginTimer = performance.now(),
-    seed = s + (await(await fetch("https://drand.cloudflare.com/public/latest")).json()).signature + (randOrg ? (await (await fetch("https://www.random.org/strings/?num=1&len=20&digits=on&upperalpha=on&loweralpha=on&unique=on&format=plain&rnd=new")).text()) : "Random.org Placeholder Seed") + (await (await fetch("/hotprox")).text()),
+    seed = suppliedSeed + (await(await fetch("https://drand.cloudflare.com/public/latest")).json()).signature + (randOrg ? (await (await fetch("https://www.random.org/strings/?num=1&len=20&digits=on&upperalpha=on&loweralpha=on&unique=on&format=plain&rnd=new")).text()) : "Random.org Placeholder Seed") + (await (await fetch("https://passwords.goalastair.com/hotprox")).text()) + mouseData,
     allSet = [];
   if(num) allSet.push(numSet);
   if(alpha) allSet.push(alphaSet);
   if(char) allSet.push(charSet);
-  if(!amt || amt == 1) return postMessage({password: await genPass(seed, len, allSet), performance: performance.now() - beginTimer});
+  if(!amt || amt == 1) {
+    const password = await genPass(seed, len, allSet);
+    if(logging) console.log(`Generation took ${performance.now() - beginTimer} ms., utilizing ${encodeURI(seed).split(/%..|./).length - 1} bytes of entropy, which has been gathered from mouse movements, any seed you may have provided manually, https://drand.love${randOrg ? ", https://www.fourmilab.ch/hotbits/, and https://random.org" : ", and https://www.fourmilab.ch/hotbits/"}. Utilized the ${Object.entries({num, alpha, char}).map(e => e[1] ? e[0] : "").join(", ")} characterset(s), generating 1 password with a length of ${len || 128}.`);
+    return postMessage(password);
+  }
   let passwords = [];
 	for(let i = 0; i < amt; i++)
 		passwords.push(await genPass(seed, len, allSet));
-	return postMessage({passwords, performance: performance.now() - beginTimer});
+  if(logging) console.log(`Generation took ${performance.now() - beginTimer} ms., utilizing ${encodeURI(seed).split(/%..|./).length - 1} bytes of entropy, which has been gathered from mouse movements, any seed you may have provided manually, https://drand.love${randOrg ? ", https://www.fourmilab.ch/hotbits/, and https://random.org" : ", and https://www.fourmilab.ch/hotbits/"}. Utilized the ${Object.entries({num, alpha, char}).map(e => e[1] ? e[0] : "").join(", ")} characterset(s), generating ${amt} passwords with a length of ${len || 128}.`);
+	return postMessage(passwords);
 }
 
 const genPass = async (s, len, charSet) => {
