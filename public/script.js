@@ -11,8 +11,10 @@ document.addEventListener("mousemove", e => {
 
 myWorker.onmessage = e => {
 	const data = e.data;
-	if(data.error) console.error(e.data.error);
-	if(Array.isArray(data))output.innerText = JSON.stringify(data);
+	if(data.error) {
+    console.error(e.data.error);
+    output.innerText = "Error: " + e.data.error;
+  } else if(Array.isArray(data)) output.innerText = JSON.stringify(data);
   else output.innerText = data;
 }
 
